@@ -1,36 +1,90 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Simple Payment dApp — Stellar Journey to Mastery (White Belt)
 
-## Getting Started
+A **Stellar Testnet** wallet connection and payment interface built with **Next.js**, **TypeScript**, **Tailwind CSS**, and the **Stellar ecosystem**.
 
-First, run the development server:
+## Project Description
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+This dApp allows users to:
+
+- Connect their **Freighter** wallet to the Stellar Testnet
+- View their native **XLM balance**
+- Fund an unfunded account via **Friendbot** with one click
+- Send **XLM payments** to any Stellar testnet address
+- See real-time transaction feedback with a link to the **Stellar Expert** block explorer
+
+Built as the Level 1 (White Belt) submission for the [Stellar Journey to Mastery Challenge](https://github.com/stellar/journey-to-mastery).
+
+## Tech Stack
+
+| Technology | Purpose |
+|---|---|
+| Next.js 16 (App Router) | React framework |
+| TypeScript | Type safety |
+| Tailwind CSS v4 | Styling |
+| `@stellar/freighter-api` | Freighter wallet integration |
+| `@stellar/stellar-sdk` | Horizon queries & transaction building |
+
+## Architecture
+
+```
+src/
+├── app/
+│   ├── globals.css       # Global styles (Tailwind)
+│   ├── layout.tsx        # Root layout
+│   └── page.tsx          # Main page — composes all components
+├── components/
+│   ├── WalletConnect.tsx     # Freighter connect/disconnect UI
+│   ├── BalanceDisplay.tsx    # XLM balance + Friendbot funding
+│   ├── PaymentForm.tsx       # Send payment form
+│   └── TransactionStatus.tsx # Success/failure feedback
+├── hooks/
+│   ├── useWallet.ts      # Wallet connection state
+│   ├── useBalance.ts     # Balance fetching + Friendbot
+│   └── usePayment.ts     # Transaction build/sign/submit flow
+├── lib/
+│   └── stellar.ts        # Stellar SDK helpers
+└── types/
+    └── index.ts          # Shared TypeScript interfaces
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Setup Instructions
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Prerequisites
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **Node.js** 18+
+- **npm** 9+
+- **Freighter** browser extension ([download](https://freighter.app))
 
-## Learn More
+### Install & Run
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+git clone https://github.com/JerryIdoko/stellar-frontend-challenge.git
+cd stellar-frontend-challenge
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+npm install
+npm run dev
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-## Deploy on Vercel
+### Usage
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1. **Connect Wallet** — Click "Connect Freighter Wallet" and approve the connection in the Freighter popup.
+2. **Fund Account** — If your account is unfunded, click "Fund with Friendbot (Testnet)" to receive free test XLM.
+3. **Send Payment** — Enter a valid Stellar testnet address and an XLM amount, then click "Send Payment".
+4. **Sign & Confirm** — Review and sign the transaction in Freighter. The result (hash) will appear with a link to the block explorer.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Screenshots
+
+### Wallet Connected State
+<!-- TODO: Insert screenshot showing connected wallet with public key displayed -->
+
+### Balance Displayed
+<!-- TODO: Insert screenshot showing XLM balance prominently displayed -->
+
+### Successful Testnet Transaction
+<!-- TODO: Insert screenshot showing transaction confirmation with hash and explorer link -->
+
+## License
+
+MIT
