@@ -46,9 +46,6 @@ export async function fetchBalance(
 }
 
 export async function buildAndSubmitPayment(
-  sourcePublicKey: string,
-  destination: string,
-  amount: string,
   signedXdr: string
 ): Promise<string> {
   const transaction = TransactionBuilder.fromXDR(

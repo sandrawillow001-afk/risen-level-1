@@ -32,12 +32,7 @@ export function usePayment(publicKey: string | null) {
 
         setTxState({ status: "submitting", hash: null, error: null });
 
-        const hash = await buildAndSubmitPayment(
-          publicKey,
-          destination,
-          amount,
-          signedTxXdr
-        );
+        const hash = await buildAndSubmitPayment(signedTxXdr);
 
         setTxState({ status: "success", hash, error: null });
       } catch (err: unknown) {

@@ -1,10 +1,11 @@
 "use client";
 
 interface BalanceDisplayProps {
-  xlm: string | null;
+  xlm: string;
   isLoading: boolean;
   error: string | null;
   publicKey: string | null;
+  isUnfunded: boolean;
   onFund: () => void;
   onRefresh: () => void;
 }
@@ -14,12 +15,13 @@ export default function BalanceDisplay({
   isLoading,
   error,
   publicKey,
+  isUnfunded,
   onFund,
   onRefresh,
 }: BalanceDisplayProps) {
   if (!publicKey) return null;
 
-  if (isLoading) {
+  if (isLoading && !isUnfunded) {
     return (
       <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
         <div className="flex items-center gap-2 text-gray-500">
@@ -33,7 +35,7 @@ export default function BalanceDisplay({
     );
   }
 
-  if (error) {
+  if (error && !isUnfunded) {
     return (
       <div className="rounded-lg border border-red-200 bg-red-50 p-6 shadow-sm">
         <p className="text-sm text-red-600">{error}</p>
@@ -41,17 +43,21 @@ export default function BalanceDisplay({
     );
   }
 
-  if (xlm === null) {
+  if (isUnfunded) {
     return (
       <div className="rounded-lg border border-amber-200 bg-amber-50 p-6 shadow-sm">
         <p className="mb-3 text-sm font-medium text-amber-800">
           Account not funded on Testnet
         </p>
+        <p className="mb-3 text-sm text-amber-600">
+          {error}
+        </p>
         <button
           onClick={onFund}
-          className="rounded-md bg-amber-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-amber-700"
+          disabled={isLoading}
+          className="rounded-md bg-amber-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-amber-700 disabled:cursor-not-allowed disabled:opacity-50"
         >
-          Fund with Friendbot (Testnet)
+          {isLoading ? "Funding..." : "Fund with Friendbot (Testnet)"}
         </button>
       </div>
     );

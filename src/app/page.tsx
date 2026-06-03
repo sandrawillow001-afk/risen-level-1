@@ -1,8 +1,8 @@
 "use client";
 
-import { useWallet } from "@/hooks/useWallet";
-import { useBalance } from "@/hooks/useBalance";
+import { useWallet } from "@/context/WalletContext";
 import { usePayment } from "@/hooks/usePayment";
+import { fundTestnetAccount } from "@/lib/stellar";
 import WalletConnect from "@/components/WalletConnect";
 import BalanceDisplay from "@/components/BalanceDisplay";
 import PaymentForm from "@/components/PaymentForm";
@@ -10,21 +10,15 @@ import TransactionStatus from "@/components/TransactionStatus";
 
 export default function Home() {
   const {
-    publicKey,
-    isConnected,
-    isLoading: walletLoading,
-    error: walletError,
+    address,
+    hasFreighter,
+    xlmBalance,
+    isLoading,
+    error,
     connect,
     disconnect,
-  } = useWallet();
-
-  const {
-    xlm,
-    isLoading: balanceLoading,
-    error: balanceError,
-    fundWithFriendbot,
     refreshBalance,
-  } = useBalance(publicKey);
+  } = useWallet();
 
   const {
     status: txStatus,
@@ -33,9 +27,12 @@ export default function Home() {
     explorerUrl,
     sendPayment,
     resetTxState,
-  } = usePayment(publicKey);
+  } = usePayment(address);
 
   const txState = { status: txStatus, hash: txHash, error: txError };
+
+  const isUnfunded =
+    address !== null && xlmBalance === "0" && !isLoading && error !== null;
 
   return (
     <main className="flex min-h-screen flex-col items-center bg-gray-50 px-4 py-12">
@@ -50,26 +47,34 @@ export default function Home() {
         </div>
 
         <WalletConnect
-          publicKey={publicKey}
-          isConnected={isConnected}
-          isLoading={walletLoading}
-          error={walletError}
+          publicKey={address}
+          isConnected={address !== null}
+          isLoading={isLoading}
+          error={error}
           onConnect={connect}
           onDisconnect={disconnect}
         />
 
-        {publicKey && (
+        {address && (
           <>
             <BalanceDisplay
-              xlm={xlm}
-              isLoading={balanceLoading}
-              error={balanceError}
-              publicKey={publicKey}
-              onFund={fundWithFriendbot}
+              xlm={xlmBalance}
+              isLoading={isLoading}
+              error={error}
+              publicKey={address}
+              isUnfunded={isUnfunded}
+              onFund={async () => {
+                try {
+                  await fundTestnetAccount(address);
+                  await refreshBalance();
+                } catch {
+                  /* error handled by refreshBalance */
+                }
+              }}
               onRefresh={refreshBalance}
             />
 
-            {xlm !== null && (
+            {!isUnfunded && (
               <PaymentForm onSend={sendPayment} txState={txState} />
             )}
 
