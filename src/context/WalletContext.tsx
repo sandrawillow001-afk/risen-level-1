@@ -10,7 +10,7 @@ import {
 } from "react";
 import {
   isConnected,
-  setAllowed,
+  requestAccess,
   getAddress,
 } from "@stellar/freighter-api";
 import { fetchBalance } from "@/lib/stellar";
@@ -80,12 +80,13 @@ export function WalletProvider({ children }: { children: ReactNode }) {
     try {
       const { isConnected: connected } = await isConnected();
 
-      if (!connected) {
-        await setAllowed();
+      if (connected) {
+        const { address: pk } = await getAddress();
+        setAddress(pk);
+      } else {
+        const { address: pk } = await requestAccess();
+        setAddress(pk);
       }
-
-      const { address: pk } = await getAddress();
-      setAddress(pk);
     } catch (err: unknown) {
       const message =
         err instanceof Error ? err.message : "Failed to connect wallet";
