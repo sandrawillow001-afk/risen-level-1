@@ -57,7 +57,7 @@ export default function BalanceDisplay({
           disabled={isLoading}
           className="rounded-md bg-amber-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-amber-700 disabled:cursor-not-allowed disabled:opacity-50"
         >
-          {isLoading ? "Funding..." : "Fund with Friendbot (Testnet)"}
+          {isLoading ? "Funding..." : "Fund & Activate Account via Friendbot"}
         </button>
       </div>
     );

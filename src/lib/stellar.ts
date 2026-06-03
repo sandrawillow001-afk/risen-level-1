@@ -9,7 +9,7 @@ import {
 
 const server = new Horizon.Server("https://horizon-testnet.stellar.org");
 
-const FRIENDBOT_URL = "https://friendbot.stellar.org";
+const FRIENDBOT_URL = "https://horizon-testnet.stellar.org/friendbot";
 
 export async function fundTestnetAccount(publicKey: string): Promise<boolean> {
   try {

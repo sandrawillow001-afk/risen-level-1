@@ -39,10 +39,10 @@ export default function Home() {
       <div className="w-full max-w-md space-y-6">
         <div className="text-center">
           <h1 className="text-3xl font-bold tracking-tight text-gray-900">
-            Simple Payment dApp
+            Stellar White Belt Payment Portal
           </h1>
           <p className="mt-2 text-sm text-gray-500">
-            Stellar Testnet Wallet & Payment Interface
+            Stellar Testnet &bull; Freighter Wallet &bull; XLM Payments
           </p>
         </div>
 

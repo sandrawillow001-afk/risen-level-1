@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Simple Payment dApp - Stellar Challenge",
+  title: "Stellar White Belt Payment Portal",
   description:
     "A Stellar Testnet wallet connection and payment interface for the Stellar Journey to Mastery Challenge (White Belt).",
 };

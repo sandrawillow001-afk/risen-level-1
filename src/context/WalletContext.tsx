@@ -59,7 +59,7 @@ export function WalletProvider({ children }: { children: ReactNode }) {
       if (balance === null) {
         setXlmBalance("0");
         setError(
-          "Your Stellar testnet account is not yet funded. Use the Friendbot to activate it before making transactions."
+          "Account not found on Testnet. Fund & Activate your account via Friendbot below."
         );
       } else {
         setXlmBalance(balance);

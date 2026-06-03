@@ -27,24 +27,56 @@ export default function WalletConnect({
   useEffect(() => { setMounted(true); }, []);
   if (!mounted) return null;
 
-  const isFreighterAvailable =
+  const hasFreighter =
     typeof window !== "undefined" && "freighter" in window;
 
-  if (!isFreighterAvailable) {
+  if (!hasFreighter) {
     return (
-      <div className="rounded-lg border border-yellow-300 bg-yellow-50 p-4 text-yellow-800">
-        <p className="text-sm font-medium">
-          Freighter wallet not detected. Please install the{" "}
-          <a
-            href="https://freighter.app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="underline hover:text-yellow-900"
-          >
-            Freighter browser extension
-          </a>{" "}
-          to use this dApp.
-        </p>
+      <div className="space-y-4">
+        <div className="rounded-lg border-2 border-yellow-400 bg-yellow-50 p-5">
+          <div className="flex items-start gap-3">
+            <svg
+              className="mt-0.5 h-6 w-6 flex-shrink-0 text-yellow-600"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"
+              />
+            </svg>
+            <div>
+              <p className="font-semibold text-yellow-800">
+                Freighter Extension Required
+              </p>
+              <p className="mt-1 text-sm text-yellow-700">
+                This dApp requires the Freighter browser extension to interact
+                with the Stellar network. Please install it from{" "}
+                <a
+                  href="https://freighter.app"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-medium underline hover:text-yellow-900"
+                >
+                  freighter.app
+                </a>
+                , then refresh this page.
+              </p>
+            </div>
+          </div>
+        </div>
+        <button
+          disabled
+          className="flex w-full cursor-not-allowed items-center justify-center gap-2 rounded-lg bg-gray-300 px-6 py-3 text-sm font-semibold text-gray-500"
+        >
+          <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+          </svg>
+          Connect Freighter Wallet
+        </button>
       </div>
     );
   }
