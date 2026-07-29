@@ -7,8 +7,8 @@ This application acts as a **Simple Payment Portal**, allowing users to seamless
 ---
 
 ## 🚀 Live Demo & Repository Details
-- **Developer:** Jerome Onoja ([@jerryidoko](https://github.com/jerryidoko))
-- **Repository URL:** [https://github.com/jerryidoko/stellar-frontend-challenge](https://github.com/jerryidoko/stellar-frontend-challenge)
+- **Developer:** sandrawillow001-afk ([@sandrawillow001-afk](https://github.com/sandrawillow001-afk))
+- **Repository URL:** [https://github.com/sandrawillow001-afk/risen-level-1](https://github.com/sandrawillow001-afk/risen-level-1)
 - **Target Network:** Stellar Testnet
 - **Supported Wallet:** Freighter Extension
 
@@ -56,8 +56,8 @@ Follow these simple steps to spin up the development environment locally:
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/jerryidoko/stellar-frontend-challenge.git
-cd stellar-frontend-challenge
+git clone https://github.com/sandrawillow001-afk/risen-level-1.git
+cd risen-level-1
 ```
 
 ### 2. Install Dependencies
