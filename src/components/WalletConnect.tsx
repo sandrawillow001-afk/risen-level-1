@@ -1,6 +1,17 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
+
+const emptySubscribe = () => () => {};
+
+/** Returns true after the component has hydrated on the client. */
+function useHasMounted(): boolean {
+  return useSyncExternalStore(
+    emptySubscribe,
+    () => true,
+    () => false
+  );
+}
 
 interface WalletConnectProps {
   publicKey: string | null;
@@ -23,8 +34,7 @@ export default function WalletConnect({
   onConnect,
   onDisconnect,
 }: WalletConnectProps) {
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => { setMounted(true); }, []);
+  const mounted = useHasMounted();
   if (!mounted) return null;
 
   const hasFreighter =

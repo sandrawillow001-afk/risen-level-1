@@ -6,6 +6,7 @@ import {
   useState,
   useCallback,
   useEffect,
+  useRef,
   type ReactNode,
 } from "react";
 import {
@@ -47,14 +48,20 @@ export function WalletProvider({ children }: { children: ReactNode }) {
   const [error, setError] = useState<string | null>(null);
   const [hasFreighter] = useState(detectFreighter);
 
-  const refreshBalance = useCallback(async () => {
-    if (!address) return;
+  // Mirrors `address` so refreshBalance can stay referentially stable while
+  // still falling back to the latest connected account for callers that do
+  // not pass an explicit public key (e.g. the Friendbot funding flow).
+  const addressRef = useRef<string | null>(null);
+
+  const refreshBalance = useCallback(async (targetAddress?: string) => {
+    const pk = targetAddress ?? addressRef.current;
+    if (!pk) return;
 
     setIsLoading(true);
     setError(null);
 
     try {
-      const balance = await fetchBalance(address);
+      const balance = await fetchBalance(pk);
 
       if (balance === null) {
         setXlmBalance("0");
@@ -71,7 +78,7 @@ export function WalletProvider({ children }: { children: ReactNode }) {
     } finally {
       setIsLoading(false);
     }
-  }, [address]);
+  }, []);
 
   const connect = useCallback(async () => {
     setIsLoading(true);
@@ -95,18 +102,26 @@ export function WalletProvider({ children }: { children: ReactNode }) {
         throw new Error("Wallet access was not granted");
       }
 
-      setAddress(pk || grantedAddress || null);
+      const resolvedAddress = pk || grantedAddress || null;
+      addressRef.current = resolvedAddress;
+      setAddress(resolvedAddress);
+
+      if (resolvedAddress) {
+        void refreshBalance(resolvedAddress);
+      }
     } catch (err: unknown) {
       const message =
         err instanceof Error ? err.message : "Failed to connect wallet";
       setError(message);
+      addressRef.current = null;
       setAddress(null);
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [refreshBalance]);
 
   const disconnect = useCallback(() => {
+    addressRef.current = null;
     setAddress(null);
     setXlmBalance("0");
     setError(null);
@@ -121,22 +136,15 @@ export function WalletProvider({ children }: { children: ReactNode }) {
         if (connected) {
           getAddress()
             .then(({ address: pk }) => {
+              addressRef.current = pk;
               setAddress(pk);
+              void refreshBalance(pk);
             })
             .catch(() => {});
         }
       })
       .catch(() => {});
-  }, [hasFreighter]);
-
-  useEffect(() => {
-    if (address) {
-      refreshBalance();
-    } else {
-      setXlmBalance("0");
-      setError(null);
-    }
-  }, [address, refreshBalance]);
+  }, [hasFreighter, refreshBalance]);
 
   return (
     <WalletContext.Provider

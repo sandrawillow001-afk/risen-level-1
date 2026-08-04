@@ -11,7 +11,6 @@ import TransactionStatus from "@/components/TransactionStatus";
 export default function Home() {
   const {
     address,
-    hasFreighter,
     xlmBalance,
     isLoading,
     error,
