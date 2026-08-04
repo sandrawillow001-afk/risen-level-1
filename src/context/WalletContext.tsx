@@ -78,15 +78,24 @@ export function WalletProvider({ children }: { children: ReactNode }) {
     setError(null);
 
     try {
+      // Step 1 — Verify wallet permissions: check whether this dApp has
+      // already been granted access to the Freighter extension.
       const { isConnected: connected } = await isConnected();
 
-      if (connected) {
-        const { address: pk } = await getAddress();
-        setAddress(pk);
-      } else {
-        const { address: pk } = await requestAccess();
-        setAddress(pk);
+      // Step 2 — Explicitly request permission to access the wallet. This is
+      // the permission-requesting step of the connection flow: requestAccess()
+      // opens Freighter's permission prompt when access hasn't been granted
+      // yet, and resolves immediately with the address when it already has.
+      const { address: grantedAddress } = await requestAccess();
+
+      // Step 3 — Retrieve the wallet's public address.
+      const { address: pk } = await getAddress();
+
+      if (!pk && !grantedAddress && !connected) {
+        throw new Error("Wallet access was not granted");
       }
+
+      setAddress(pk || grantedAddress || null);
     } catch (err: unknown) {
       const message =
         err instanceof Error ? err.message : "Failed to connect wallet";
